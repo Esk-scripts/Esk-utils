@@ -183,39 +183,21 @@ end)
 
 
 --- Suelo ---
+
+
+RegisterKeyMapping(function() Ragdoll() end, 'Ragdoll your character', 'keyboard', 'U')
+
 local ragdoll = false
-function setRagdoll(flag)
-  ragdoll = flag
-end
-Citizen.CreateThread(function()
-  while true do
-    Wait(0)
-    if ragdoll then
-      SetPedToRagdoll(PlayerPedId(), 1000, 1000, 0, 0, 0, 0)
+function Ragdoll()
+    local ped = PlayerPedId()
+    if not IsPedOnFoot(ped) then return end
+    ragdoll = not ragdoll
+
+    while ragdoll do
+        SetPedToRagdoll(ped, 1000, 1000, 0, 0, 0, 0)
+        Wait()
     end
-  end
-end)
-
-ragdol = true
-RegisterNetEvent("Ragdoll")
-AddEventHandler("Ragdoll", function()
-	if ( ragdol ) then
-		setRagdoll(true)
-		ragdol = false
-	else
-		setRagdoll(false)
-		ragdol = true
-	end
-end)
-
-Citizen.CreateThread(function()
- 	while true do
- 		Wait(100)
- 		if ( IsControlPressed(2, 303) ) then  --U
- 			TriggerEvent("Ragdoll", source)
- 		end
- 	end
-end)
+end
 
 
 
